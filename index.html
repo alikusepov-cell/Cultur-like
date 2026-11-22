@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Культура “лайков”: исследование</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<style>
+  :root{--ink:#efe9e4;--mute:#a69e99;--line:rgba(255,255,255,.12);--card:rgba(255,255,255,.045);--red:#f0665a;--amber:#f2a24a;
+    box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  html{scroll-behavior:smooth;background:#07060b}
+  body{background:transparent;color:var(--ink);font-family:Inter,Arial,sans-serif;line-height:1.65}
+  /* Фон: тёмная база с янтарным и красным свечением, как на референсе */
+  .glow{position:fixed;inset:0;z-index:-1;background:#07060b;overflow:hidden}
+  .glow i{position:absolute;border-radius:50%;filter:blur(70px);animation:dr 22s ease-in-out infinite alternate}
+  .glow .a{width:55vw;height:55vw;left:-18vw;top:-22vw;background:radial-gradient(circle,#e04545 0,rgba(180,40,50,.55) 40%,transparent 70%)}
+  .glow .b{width:60vw;height:60vw;right:-20vw;bottom:-24vw;background:radial-gradient(circle,#ec8123 0,rgba(190,90,30,.55) 40%,transparent 70%);animation-delay:-8s}
+  .glow .c{width:50vw;height:30vw;left:35vw;bottom:-18vw;background:radial-gradient(circle,rgba(130,25,30,.6),transparent 70%);animation-delay:-14s}
+  @keyframes dr{to{transform:translate(4vw,3vw) scale(1.08)}}
+  .serif,h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif}
+  h1,h2{font-weight:600;line-height:1}
+  .mute{color:var(--mute)} .rule{border-color:var(--line)}
+  .card{background:var(--card);border:1px solid var(--line);backdrop-filter:blur(6px)}
+  .t p{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.26rem;line-height:1.7;margin-bottom:1.05rem}
+  .t h3{font-size:1.75rem;margin:2rem 0 .6rem;line-height:1.1;color:var(--amber)}
+  .side{font-size:.82rem;line-height:1.5;color:var(--mute);border-left:2px solid var(--red);padding-left:.8rem;margin-bottom:1.3rem}
+  .side b{display:block;color:var(--ink)}
+  .pull{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:clamp(1.5rem,3vw,2.3rem);line-height:1.2;color:var(--amber);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.2rem 0;margin:1.8rem 0}
+  .pull small{display:block;font:normal .8rem Inter,sans-serif;color:var(--mute);margin-top:.6rem}
+  .panel{display:none}.panel.on{display:block;animation:in .4s ease}
+  @keyframes in{from{opacity:0;transform:translateY(8px)}}
+  .tabbtn{padding:.9rem 0;margin-right:1.3rem;white-space:nowrap;color:var(--mute);font-size:.85rem;border-bottom:2px solid transparent}
+  .tabbtn[aria-selected=true]{color:var(--ink);border-color:var(--red)}
+  .btn{border:1px solid rgba(255,255,255,.4);padding:.45rem .9rem;font-size:.85rem}
+  .btn[aria-pressed=true],.btn:hover{background:var(--ink);color:#120c0c}
+  .qb{width:2.4rem;height:2.4rem;border:1px solid var(--line);font-size:.85rem}
+  .qb[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#120c0c}
+  .seg{cursor:pointer;transition:opacity .2s}
+  .acc{border-top:1px solid var(--line);padding:1.2rem 0;text-align:left;width:100%}
+  .acc .more{display:none}.acc[aria-expanded=true] .more{display:block}
+  .plus{transition:transform .2s;display:inline-block}.acc[aria-expanded=true] .plus{transform:rotate(45deg)}
+  a.src{color:var(--amber);text-decoration:underline;text-underline-offset:3px}
+  :focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+  @media (prefers-reduced-motion:reduce){.panel.on{animation:none}.glow i{animation:none}html{scroll-behavior:auto}}
+
+  /* ===== Эффекты v2 ===== */
+  .glow .a{background:radial-gradient(circle,var(--red) 0,color-mix(in srgb,var(--red) 45%,transparent) 40%,transparent 70%)}
+  .glow .b{background:radial-gradient(circle,var(--amber) 0,color-mix(in srgb,var(--amber) 45%,transparent) 40%,transparent 70%)}
+  .glow .d{width:34vw;height:34vw;left:52vw;top:8vw;background:radial-gradient(circle,rgba(120,60,230,.55),transparent 68%);animation-duration:17s;animation-delay:-3s}
+  .glow .e{width:26vw;height:26vw;left:6vw;bottom:6vw;background:radial-gradient(circle,rgba(30,190,200,.35),transparent 68%);animation-duration:26s;animation-delay:-11s}
+  .glow .f{width:20vw;height:20vw;left:40vw;top:42vw;background:radial-gradient(circle,rgba(255,80,140,.4),transparent 68%);animation-duration:13s}
+  .glow::after{content:"";position:absolute;inset:0;opacity:.09;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+  .ring{position:absolute;border:1px dashed rgba(255,255,255,.18);border-radius:50%;animation:rot 40s linear infinite}
+  .ring.r1{width:38vw;height:38vw;right:6vw;top:10vh}.ring.r2{width:16vw;height:16vw;left:14vw;top:50vh;animation-duration:25s;animation-direction:reverse;border-style:solid;opacity:.5}
+  @keyframes rot{to{transform:rotate(360deg)}}
+  .spot{position:absolute;inset:0;pointer-events:none;background:radial-gradient(420px circle at var(--mx,70%) var(--my,30%),rgba(255,190,120,.15),transparent 60%)}
+  .panel h1,.panel h2{background:linear-gradient(100deg,#fff 0,#fff 30%,var(--amber) 48%,var(--red) 58%,#fff 76%,#fff 100%);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sh 9s ease-in-out infinite alternate}
+  @keyframes sh{to{background-position:100% 0}}
+  #stars h2,#experts h2{background:none;-webkit-text-stroke:1.3px var(--amber);color:transparent;animation:none;text-transform:uppercase;letter-spacing:.01em}
+  #psych h2,#active h2{font-style:italic}
+  @keyframes in{from{opacity:0;transform:translateY(16px);filter:blur(10px)}}
+  .rv{opacity:0;transform:translateY(26px)}
+  .rv.in{opacity:1;transform:none;transition:opacity .7s,transform .7s cubic-bezier(.2,.8,.2,1)}
+  .pull{position:relative;transform:rotate(-.6deg);border:0;border-left:4px solid var(--red);background:linear-gradient(100deg,color-mix(in srgb,var(--red) 16%,transparent),transparent);padding:1.6rem 1.2rem 1.6rem 2.4rem}
+  .pull::before{content:"\201C";position:absolute;left:.5rem;top:-.2rem;font-size:4.5rem;line-height:1;color:var(--red);opacity:.7}
+  .pull.rv{transform:translateY(26px) rotate(-.6deg)}.pull.rv.in{transform:rotate(-.6deg)}
+  .t p:first-of-type::first-letter{font-size:3.5rem;float:left;line-height:.85;padding:.15rem .5rem 0 0;color:var(--amber);font-weight:600}
+  .t h3::before{content:"";display:inline-block;width:.6rem;height:.6rem;background:var(--red);transform:rotate(45deg);margin-right:.7rem;vertical-align:middle}
+  .t h3:nth-of-type(even){color:var(--red);font-style:italic}
+  .side b{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--amber)}
+  .card{transition:border-color .25s,box-shadow .25s,transform .25s}.card:hover{border-color:var(--amber);box-shadow:0 0 34px -10px var(--red);transform:translateY(-3px)}
+  .marq{overflow:hidden;border-block:1px solid var(--line);padding:.5rem 0;margin:0 -1.25rem 2.5rem;transform:rotate(-1deg)}
+  .mq{display:flex;gap:2.4rem;width:max-content;animation:mq 30s linear infinite;font:italic 600 1.7rem 'Cormorant Garamond',serif;white-space:nowrap}
+  .mq span:nth-child(3n){color:var(--amber)}.mq span:nth-child(3n+1){-webkit-text-stroke:1px var(--ink);color:transparent}
+  @keyframes mq{to{transform:translateX(-50%)}}
+  #donut{animation:dn 1s cubic-bezier(.2,.8,.2,1)}@keyframes dn{from{transform:rotate(-300deg) scale(.6);opacity:0}}
+  .lk{display:inline-flex;align-items:center;gap:.5rem;border:1px solid rgba(255,255,255,.25);padding:.35rem .9rem;border-radius:999px;cursor:pointer;font-size:.85rem;background:rgba(255,255,255,.05);transition:.2s;user-select:none}
+  .lk:hover{border-color:var(--red);transform:translateY(-2px) rotate(-1.5deg)}
+  .lk[aria-pressed=true]{background:linear-gradient(90deg,var(--red),var(--amber));color:#150c0c;border-color:transparent;font-weight:600}
+  .lk .hh{font-size:1.1rem}.lk[aria-pressed=true] .hh{animation:beat .6s}@keyframes beat{40%{transform:scale(1.8) rotate(-12deg)}}
+  .pt{position:fixed;pointer-events:none;z-index:70;animation:pt .95s ease-out forwards}
+  @keyframes pt{to{transform:translate(var(--dx),var(--dy)) scale(.4) rotate(240deg);opacity:0}}
+  .fab{position:fixed;right:1.1rem;bottom:calc(1.1rem + env(safe-area-inset-bottom,0px));z-index:50;width:3.5rem;height:3.5rem;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--amber));color:#170c0c;display:grid;place-items:center;box-shadow:0 8px 30px -6px var(--red);animation:wob 7s infinite}
+  .fab::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--amber);animation:ping 2.2s infinite}
+  @keyframes ping{to{transform:scale(1.7);opacity:0}}@keyframes wob{0%,88%,100%{transform:none}91%{transform:rotate(-14deg) scale(1.1)}94%{transform:rotate(12deg) scale(1.1)}97%{transform:rotate(-6deg)}}
+  .fabn{position:absolute;top:-.3rem;right:-.3rem;min-width:1.35rem;height:1.35rem;border-radius:999px;background:#fff;color:#170c0c;font-size:.7rem;font-weight:700;display:none;place-items:center;padding:0 .3rem}
+  .dbg{position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .3s}.dbg.on{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(26rem,100%);z-index:60;transform:translateX(105%);transition:transform .45s cubic-bezier(.2,.8,.2,1);background:rgba(12,10,16,.95);backdrop-filter:blur(14px);border-left:1px solid var(--line);padding:1.2rem;padding-top:calc(1.2rem + env(safe-area-inset-top,0px));display:flex;flex-direction:column}.drawer.on{transform:none}
+  .toast{position:fixed;left:50%;bottom:5.5rem;transform:translateX(-50%);z-index:80;background:#fff;color:#170c0c;padding:.6rem 1rem;font-size:.8rem;max-width:90vw}
+  @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.fab,.fab::before,.mq,.ring,.panel h1,.panel h2{animation:none}}
+
+  /* ===== Эффекты v3: живой фон, частицы, параллакс, прогресс, «живое стекло» ===== */
+  /* Параллакс через независимое свойство translate: не конфликтует с анимациями transform */
+  .glow i,.glow .ring,.glow .orb{translate:calc(var(--pmx,0) * var(--d,40px)) calc(var(--pmy,0) * var(--d,40px) + var(--psy,0) * var(--s,-120px))}
+  .glow .a{--d:26px;--s:-70px}.glow .b{--d:34px;--s:-150px}.glow .c{--d:20px;--s:-60px}
+  .glow .d{--d:52px;--s:-210px}.glow .e{--d:44px;--s:-170px}.glow .f{--d:62px;--s:-250px}
+  .glow .g{--d:48px;--s:-190px}.glow .h{--d:56px;--s:-230px}
+  .glow .ring.r1{--d:-36px;--s:90px}.glow .ring.r2{--d:70px;--s:-200px}
+  .glow .ring.r3{--d:-58px;--s:140px}.glow .ring.r4{--d:24px;--s:-80px}
+  /* Дышащие и покачивающиеся цветные пятна (поверх существующего дрейфа) */
+  .glow i{animation:dr 22s ease-in-out infinite alternate,fxSway 13s ease-in-out infinite alternate}
+  @keyframes fxSway{0%{opacity:.78;scale:.94;rotate:-8deg}50%{opacity:1;scale:1.1;rotate:6deg}100%{opacity:.86;scale:1;rotate:14deg}}
+  .glow .g{width:28vw;height:28vw;right:18vw;bottom:10vw;background:radial-gradient(circle,rgba(255,170,60,.38),transparent 68%);animation-duration:19s,15s;animation-delay:-6s,-4s}
+  .glow .h{width:22vw;height:22vw;left:20vw;top:14vw;background:radial-gradient(circle,rgba(90,140,255,.34),transparent 68%);animation-duration:23s,11s;animation-delay:-9s,-7s}
+  /* Дополнительные кольца */
+  .ring.r3{width:24vw;height:24vw;right:22vw;bottom:8vh;opacity:.45;animation-duration:55s;border-color:rgba(242,162,74,.3)}
+  .ring.r4{width:62vw;height:62vw;left:-16vw;top:52vh;opacity:.28;animation-duration:90s;animation-direction:reverse;border-style:dotted;border-color:rgba(240,102,90,.4)}
+  /* Стеклянные сферы */
+  .orb{position:absolute;border-radius:50%;pointer-events:none;border:1px solid rgba(255,255,255,.09);
+    background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.26),rgba(255,255,255,.05) 34%,rgba(240,102,90,.06) 62%,transparent 72%);
+    box-shadow:inset -10px -14px 30px rgba(0,0,0,.25),0 0 50px -12px rgba(242,162,74,.35);animation:fxFloat 16s ease-in-out infinite alternate}
+  .orb.o1{width:9vw;height:9vw;left:8vw;top:18vh}
+  .orb.o2{width:6vw;height:6vw;right:14vw;top:56vh;animation-duration:12s;animation-delay:-5s}
+  .orb.o3{width:13vw;height:13vw;left:44vw;bottom:-3vh;animation-duration:21s;animation-delay:-9s;opacity:.8}
+  @keyframes fxFloat{0%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(2vw,-3vh,0) rotate(8deg)}100%{transform:translate3d(-2vw,2vh,0) rotate(-6deg)}}
+
+  /* Частицы-символы на заднем плане */
+  .fxp{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+  .fxp span{position:absolute;left:var(--x);bottom:-10vh;line-height:1;font-size:var(--s);color:var(--c);opacity:0;filter:blur(var(--b));
+    translate:calc(var(--pmx,0) * var(--pd,20px)) calc(var(--pmy,0) * var(--pd,20px) + var(--psy,0) * var(--ps,-100px));
+    animation:fxUp var(--t) linear var(--dl) infinite;will-change:transform,opacity}
+  @keyframes fxUp{0%{transform:translate3d(0,0,0) rotate(0);opacity:0}12%{opacity:var(--o)}88%{opacity:var(--o)}100%{transform:translate3d(var(--sw),-118vh,0) rotate(var(--r));opacity:0}}
+
+  /* Неоновая полоса прогресса чтения */
+  .fx-progress{position:fixed;left:0;right:0;top:0;height:3px;z-index:90;pointer-events:none;background:rgba(255,255,255,.04)}
+  .fx-progress i{display:block;height:100%;width:100%;transform-origin:0 50%;transform:scaleX(var(--prog,0));
+    background:linear-gradient(90deg,#7b4dff,#ff4f8b,var(--red),var(--amber),#ffe08a);
+    box-shadow:0 0 8px var(--red),0 0 18px color-mix(in srgb,var(--amber) 70%,transparent),0 0 32px color-mix(in srgb,var(--red) 55%,transparent);transition:transform .12s linear}
+
+  /* «Живое стекло»: мягкий световой блик, следующий за курсором */
+  .card,.pull{--gx:50%;--gy:50%}
+  .card{position:relative}
+  .card::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;opacity:0;transition:opacity .4s;
+    background:radial-gradient(200px circle at var(--gx) var(--gy),rgba(255,214,160,.95),rgba(240,102,90,.35) 45%,transparent 70%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+  .card::after,.pull::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .4s;
+    background:radial-gradient(280px circle at var(--gx) var(--gy),rgba(255,255,255,.12),rgba(255,214,170,.06) 42%,transparent 72%),
+               linear-gradient(115deg,transparent 35%,rgba(255,255,255,.05) 50%,transparent 65%)}
+  @media (hover:hover){.card:hover::before,.card:hover::after,.pull:hover::after{opacity:1}}
+  .card:focus-within::before,.card:focus-within::after{opacity:.7}
+
+  @media (prefers-reduced-motion:reduce){
+    .glow i,.orb,.ring,.fxp span{animation:none!important}
+    .glow i,.glow .ring,.glow .orb,.fxp span{translate:none!important}
+    .fxp{display:none}
+    .fx-progress i{transition:none}
+    .card::before,.card::after,.pull::after{transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i><i class="e"></i><i class="f"></i><span class="ring r1"></span><span class="ring r2"></span><i class="g"></i><i class="h"></i><span class="ring r3"></span><span class="ring r4"></span><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span><div class="spot" id="spot"></div></div>
+<div class="fxp" id="fxp" aria-hidden="true"></div>
+<div class="fx-progress" aria-hidden="true"><i></i></div>
+
+<header class="fixed left-0 right-0 z-30 border-b rule" style="top:env(safe-area-inset-top,0px);background:rgba(7,6,11,.82);backdrop-filter:blur(10px)">
+  <div class="flex items-center justify-between px-5 md:px-10 h-14">
+    <span class="serif italic text-xl whitespace-nowrap">Культура “лайков”</span>
+    <nav id="tabs" role="tablist" class="hidden xl:flex" aria-label="Главы"></nav>
+    <button id="burger" class="xl:hidden btn" aria-expanded="false">Главы</button>
+  </div>
+  <nav id="mnav" class="hidden xl:hidden border-t rule px-5 py-1" style="background:#0b0a10"></nav>
+</header>
+
+<main class="pt-14 min-h-screen">
+
+<!-- 1. ВВЕДЕНИЕ -->
+<section id="intro" class="panel px-5 md:px-12 py-14" role="tabpanel">
+  <div class="marq" aria-hidden="true"><div class="mq" id="mq"></div></div>
+  <div class="grid lg:grid-cols-12 gap-10 min-h-[58vh] items-end max-w-7xl">
+    <h1 class="lg:col-span-9" style="font-size:clamp(2.7rem,7.6vw,7rem)">Культура “лайков”: как социальное одобрение влияет на самооценку и социальное поведение?</h1>
+    <p class="lg:col-span-3 mute text-sm">Проектная работа курса «Политология и социология». Выполнили: Джуламанова Хава, Кенжебаев Алиби, Газез Алихан, Кусепов Али, Ермек Алишер, Курманбаева Адия.</p>
+  </div>
+  <div class="grid lg:grid-cols-12 gap-x-12 mt-16 max-w-6xl border-t rule pt-10 t">
+    <div class="lg:col-span-7">
+      <h3 class="!mt-0">Социальное одобрение до интернета и после</h3>
+      <p>Люди всегда стремились к признанию окружающих: одобрение выражалось словами поддержки, похвалой, уважением, принятием в группу, а неодобрение критикой, осуждением и исключением из круга общения. Мнение других играло роль в формировании самооценки и влияло на поведение.</p>
+      <p>Социальные сети (Instagram, TikTok, YouTube и другие) стали новым пространством общения и самовыражения. Реакцию окружающих теперь можно наблюдать в цифровой среде: количество лайков, комментариев и просмотров видно автору и всем остальным.</p>
+      <h3>Что такое культура “лайков”</h3>
+      <p>Лайки, комментарии и репосты стали формами социального одобрения. Фотография с большим числом реакций может восприниматься как подтверждение собственной значимости, а малое число лайков вызывает сомнения. Особенность цифрового одобрения в том, что оно количественное: его можно увидеть, посчитать и сравнить. Отсюда и “тренд”, когда публикация набирает популярность и её начинают повторять многие.</p>
+      <h3>Положительная сторона</h3>
+      <p>Поддержка друзей и одобрение аудитории дают приятные эмоции и уверенность, помогают самовыражаться, находить единомышленников и поддерживать социальные связи. Реакция на творческую, образовательную или спортивную работу может мотивировать продолжать начатое.</p>
+      <h3>Отрицательная сторона</h3>
+      <p>Если человек оценивает себя преимущественно через реакцию аудитории, самооценка становится нестабильной. Добавляются социальное сравнение с отобранными, “глянцевыми” публикациями других, зависть и неудовлетворённость собой. Поведение тоже меняется: люди публикуют то, что понравится аудитории, участвуют в трендах, удаляют посты без нужного числа лайков, избегают непопулярных мнений. Проблема не в самих реакциях, а в том, что внешнее одобрение становится главным источником самооценки.</p>
+      <div class="pull">Как культура “лайков” влияет на самооценку человека, его представление о собственной значимости и поведение в обществе?<small>Исследовательская проблема</small></div>
+    </div>
+    <div class="lg:col-span-5 lg:pt-12">
+      <p class="side"><b>Цель</b>Понять, как реакции пользователей влияют на восприятие себя и поведение, и почему социальное одобрение может быть и поддержкой, и психологическим давлением.</p>
+      <p class="side"><b>Вопрос 1</b>Как “лайки” влияют на самооценку пользователей?</p>
+      <p class="side"><b>Вопрос 2</b>Как обратная связь аудитории влияет на поведение и мотивацию создавать контент?</p>
+      <p class="side"><b>Вопрос 3</b>Культ “лайков” — социальная проблема или форма социальной поддержки?</p>
+    </div>
+  </div>
+  <div class="max-w-6xl border-t rule pt-4 t grid lg:grid-cols-12 gap-x-12">
+    <div class="lg:col-span-6"><h3>Задачи</h3>
+      <p>Изучить понятие культуры “лайков”; выяснить, как обычные пользователи воспринимают лайки; исследовать опыт активных авторов; сравнить обе группы; понять, проблема это или поддержка.</p></div>
+    <div class="lg:col-span-6"><h3>Источники и методы</h3>
+      <p>Публичные материалы знаменитостей, онлайн-опрос в Google Forms (неактивные пользователи), видеоопросы активных пользователей, интервью с психологами. Методы: контент-анализ, анкетирование, видеоопросы, экспертное интервью, сравнительный анализ, обобщение результатов.</p></div>
+  </div>
+  <div class="max-w-6xl border-t rule pt-8 mt-6">
+    <h3 class="serif text-3xl mb-4">Источники</h3>
+    <ol id="src" class="list-decimal pl-6 text-sm space-y-1 md:columns-2 gap-10 break-words"></ol>
+  </div>
+</section>
+
+<!-- 2. ПСИХОЛОГИЯ -->
+<section id="psych" class="panel px-5 md:px-12 py-14" role="tabpanel">
+  <h2 class="text-5xl md:text-7xl max-w-4xl mb-12">Психологическое влияние культуры лайков</h2>
+  <div class="grid lg:grid-cols-12 gap-x-12 max-w-6xl t">
+    <div class="lg:col-span-7">
+      <p>Лайки с психологической точки зрения выполняют функцию социального одобрения: дают ощущение внимания, признания и принадлежности. Многие оценивают свою привлекательность и успешность через реакцию виртуальной аудитории, и внешнее одобрение может стать основой самооценки.</p>
+      <h3>Потребность в одобрении и подкрепление</h3>
+      <p>Человек стремится быть принятым, а в соцсетях эта потребность приобретает измеримую форму. Работает положительное подкрепление: много лайков дают приятные эмоции и желание повторить. Публикация постепенно превращается из самовыражения в поиск подтверждения значимости.</p>
+      <h3>Неустойчивая самооценка</h3>
+      <p>Особенно уязвимы люди с неустойчивой самооценкой: меньше реакций, чем ожидалось, воспринимается как личная неудача. Но число лайков не объективная оценка личности, на него влияют алгоритмы, время публикации и активность аудитории.</p>
+      <p class="pull">«В социальных сетях люди не постят себя в бигудях и невыглаженной одежде... в основном они показывают себя с красивой стороны, с фильтрами, используя различные маски. Для нас это своеобразный колодец ощущения собственной неполноценности.»<small>Полина Свечникова, психиатр</small></p>
+      <h3>Социальное сравнение</h3>
+      <p>Пользователи видят наиболее удачные моменты чужой жизни и сравнивают с ними свою повседневность. Возникает искажённая картина реальности, неудовлетворённость собой и зависть, особенно в отношении внешности.</p>
+      <p class="pull">«Социальные сети делают выраженный разрыв между “Я реальная” и “Я идеальная”... подписчики и родственники подкрепляют это лайками, и я получаю дофамин, а потом смотрю на себя в зеркало и замечаю свои недостатки.»<small>Полина Свечникова</small></p>
+      <h3>Поведение и эмоции</h3>
+      <p>Человек выбирает фото и слова, ориентируясь на предполагаемую реакцию, и может избегать собственного мнения из страха критики. Ожидание реакции вызывает тревожность, раздражение и привычку проверять уведомления.</p>
+      <p>Лайки нельзя назвать только вредными: они поддерживают и помогают найти единомышленников. Значение имеет отношение человека к ним и степень зависимости самооценки от внешней оценки.</p>
+    </div>
+    <div class="lg:col-span-5 lg:pt-3">
+      <p class="side"><b>Положительное подкрепление</b>Награда за действие повышает вероятность его повторения.</p>
+      <p class="side"><b>Социальное сравнение</b>Оценка себя через сопоставление с другими.</p>
+      <p class="side"><b>Комментарий психиатра</b>«Ни одна социальная сеть, ни один телефон не может вызвать заболевание сама по себе. Но это является одним из ключевых факторов.»</p>
+      <p class="side"><b>Только если проблема есть</b>Социальные сети «катастрофически не могут уничтожить самооценку, только если проблема есть, и она низкая сама по себе».</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. ЗНАМЕНИТОСТИ -->
+<section id="stars" class="panel px-5 md:px-12 py-14" role="tabpanel">
+  <h2 class="text-5xl md:text-7xl max-w-4xl mb-3">Культура лайков на примере знаменитостей</h2>
+  <p class="mute mb-10">Шесть кейсов. Нажмите на имя, чтобы открыть.</p>
+  <div id="cases" class="max-w-4xl"></div>
+  <div class="max-w-4xl mt-12 t border-t rule pt-2">
+    <h3>Теоретическое заключение</h3>
+    <p>Знаменитости с разными образами и стратегиями (творчество, провокации, скандалы) объединены тем, что реакция аудитории стала частью их публичности. Внимание не всегда означает одобрение: даже критика увеличивает охваты.</p>
+    <p>Культуру лайков можно рассматривать как проявление экономики внимания, где внимание становится социальным и экономическим ресурсом. Количество реакций не обязательно отражает реальные достижения или общественное уважение. Исследование Эшли Мирс и Тейлора Бове о цифровой известности показывает, что высокая видимость сочетается с критикой и нестабильной репутацией.</p>
+  </div>
+</section>
+
+<!-- 4. ОПРОС -->
+<section id="survey" class="panel px-5 md:px-12 py-14" role="tabpanel">
+  <h2 class="text-5xl md:text-7xl max-w-4xl mb-3">Онлайн-опрос: 118 ответов</h2>
+  <p class="mute mb-8 max-w-2xl">Молодёжь 15–20 лет составляет 88,1 % участников. Выберите вопрос, наведите курсор или коснитесь сектора.</p>
+  <div id="qnav" class="flex flex-wrap gap-2 mb-8 max-w-3xl"></div>
+  <p id="qTheme" class="mute text-sm mb-1"></p>
+  <h3 id="qTitle" class="text-3xl md:text-4xl max-w-3xl mb-4 serif"></h3><div id="qLike" class="mb-8"></div>
+  <div class="grid lg:grid-cols-12 gap-10 max-w-6xl">
+    <div class="lg:col-span-5">
+      <div class="relative max-w-xs mx-auto">
+        <svg id="donut" viewBox="0 0 200 200" class="w-full -rotate-90" role="img" aria-label="Диаграмма ответов"></svg>
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-14 pointer-events-none">
+          <p id="dPct" class="serif font-semibold" style="font-size:3.2rem;line-height:1">—</p><p id="dLbl" class="text-xs mute"></p>
+        </div>
+      </div>
+      <div id="legend" class="mt-6 space-y-1 text-sm"></div>
+    </div>
+    <div class="lg:col-span-7 t"><p id="qText"></p>
+      <div class="flex gap-3 mt-6"><button id="qp" class="btn">Предыдущий</button><button id="qn" class="btn">Следующий</button></div></div>
+  </div>
+  <div class="max-w-4xl t mt-14 border-t rule pt-2">
+    <h3>Главное противоречие</h3>
+    <p>Большинство респондентов говорит, что не следит за числом лайков, не сравнивает себя с популярными людьми и не считает популярность мерой ценности. Но почти половина (48,3 %) признаёт, что чужие публикации хотя бы иногда влияют на настроение, уверенность или поведение. Влияние соцсетей не всегда проявляется напрямую: человек может говорить, что ему безразличны лайки, и всё равно испытывать эмоции от чужих успехов.</p>
+    <p>Лайки для молодёжи обычно просто способ общения и выражения симпатии, но социальное одобрение всё же влияет на повседневную жизнь. Популярность в интернете не определяет настоящую ценность человека.</p>
+  </div>
+</section>
+
+<!-- 5. НЕАКТИВНЫЕ -->
+<section id="inactive" class="panel px-5 md:px-12 py-14" role="tabpanel">
+  <h2 class="text-5xl md:text-7xl max-w-5xl mb-3">Анализ ответов неактивных пользователей</h2>
+  <p class="mute mb-10 max-w-2xl">Семь респондентов, 13 вопросов. Выводы авторов предварительные: ответы краткие, выборка мала.</p>
+  <div class="grid lg:grid-cols-12 gap-12 max-w-6xl">
+    <div class="lg:col-span-7"><div id="inQ"></div></div>
+    <div class="lg:col-span-5">
+      <h3 class="serif text-3xl mb-4">Семь портретов</h3>
+      <div id="prof" class="space-y-3 text-sm"></div>
+    </div>
+  </div>
+  <div class="max-w-4xl t mt-12 border-t rule pt-2">
+    <h3>Итог по группе</h3>
+    <p>Культура лайков влияет на опрошенных слабо и скорее нейтрально. Лайк для них знак внимания к друзьям или способ отметить понравившееся, а не борьба за популярность. Если соцсети влияют на настроение, то через сам контент. Негатив заметен у одного участника: он проводит в сетях больше всех, всегда смотрит на количество лайков и признаётся в зависти и комплексах. Сами респонденты говорят, что лайки на них не действуют, но интерес других к лайкам объясняют завистью и желанием быть значимым, то есть видят проблему скорее у других.</p>
+  </div>
+</section>
+
+<!-- 6. АКТИВНЫЕ -->
+<section id="active" class="panel px-5 md:px-12 py-14" role="tabpanel">
+  <h2 class="text-5xl md:text-7xl max-w-5xl mb-3">Анализ интервью активных пользователей</h2>
+  <p class="mute mb-10 max-w-2xl">Авторы, которые регулярно публикуют сторис и видео в Instagram или TikTok. Все профили закрытые, контент смотрят друзья.</p>
+  <div class="max-w-4xl"><div id="acQ"></div></div>
+  <div class="max-w-4xl t mt-12 border-t rule pt-2">
+    <h3>Итог по группе</h3>
+    <p>Активные пользователи демонстрируют здоровую модель поведения: публикуют ради близкого круга, лайки воспринимают как приятный бонус, самооценка не зависит от реакций, они не сравнивают себя с блогерами и разделяют виртуальный образ и реальную личность. Единичные случаи удаления постов не носят драматического характера. Для этой группы соцсети полезный инструмент самовыражения и общения, а не источник токсичной зависимости.</p>
+  </div>
+</section>
+
+<!-- 7. ЭКСПЕРТЫ -->
+<section id="experts" class="panel px-5 md:px-12 py-14" role="tabpanel">
+  <h2 class="text-5xl md:text-7xl max-w-4xl mb-8">Экспертные интервью с психологами</h2>
+  <div class="grid md:grid-cols-2 gap-5 max-w-4xl mb-12">
+    <div class="card p-5"><div class="flex items-start justify-between gap-3"><a class="serif text-2xl src" href="https://drive.google.com/file/d/11AnSQFMq43qcbjB8LadlWyfYgXK5T4En/view?usp=sharing" target="_blank" rel="noopener" aria-label="Видеоинтервью: Джуламанова Нургуль Мухтаровна">Джуламанова Нургуль Мухтаровна</a><a href="https://drive.google.com/file/d/11AnSQFMq43qcbjB8LadlWyfYgXK5T4En/view?usp=sharing" target="_blank" rel="noopener" aria-label="Смотреть видеоинтервью: Джуламанова Нургуль Мухтаровна" title="Смотреть видеоинтервью" class="flex-none grid place-items-center rounded-full" style="width:2.6rem;height:2.6rem;background:linear-gradient(135deg,var(--red),var(--amber));color:#170c0c"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></a></div><p class="mute text-sm">Частный психолог · видеоинтервью</p></div>
+    <div class="card p-5"><div class="flex items-start justify-between gap-3"><a class="serif text-2xl src" href="https://drive.google.com/file/d/1t29bsTeGS3p4KoL0I5zlsitrbso5q5Dt/view?usp=sharing" target="_blank" rel="noopener" aria-label="Видеоинтервью: Абдыхамит Ербол Абдулахитулы">Абдыхамит Ербол Абдулахитулы</a><a href="https://drive.google.com/file/d/1t29bsTeGS3p4KoL0I5zlsitrbso5q5Dt/view?usp=sharing" target="_blank" rel="noopener" aria-label="Смотреть видеоинтервью: Абдыхамит Ербол Абдулахитулы" title="Смотреть видеоинтервью" class="flex-none grid place-items-center rounded-full" style="width:2.6rem;height:2.6rem;background:linear-gradient(135deg,var(--red),var(--amber));color:#170c0c"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></a></div><p class="mute text-sm">Психолог университета КАЗАТУ · видеоинтервью</p></div>
+  </div>
+  <div id="exp" class="max-w-4xl"></div>
+  <div class="max-w-4xl t mt-12 border-t rule pt-2">
+    <h3>Общий вывод</h3>
+    <p>Оба специалиста считают потребность в одобрении естественной: реакция аудитории улучшает настроение и самооценку, но чрезмерная зависимость от лайков ведёт к негативным последствиям. Особенно уязвимы люди с неустойчивой самооценкой, а постоянное сравнение вызывает тревожность и обесценивание достижений. Стремление к вниманию заставляет менять поведение и публиковать то, что не соответствует настоящим интересам.</p>
+    <p class="pull">Сами по себе лайки не негативное явление. Проблема в том, что человек связывает самооценку и значимость с виртуальным одобрением. Количество лайков не должно становиться мерой человеческой ценности.</p>
+  </div>
+</section>
+
+<!-- 7б. ДОПОЛНИТЕЛЬНЫЕ МАТЕРИАЛЫ -->
+<section id="extra" class="panel px-5 md:px-12 py-14" role="tabpanel">
+  <h2 class="text-5xl md:text-7xl max-w-4xl mb-12">Дополнительные материалы</h2>
+  <div class="grid lg:grid-cols-12 gap-x-12 max-w-6xl t">
+    <div class="lg:col-span-7">
+      <h3 class="!mt-0">Авторы и зрители смотрят на лайки по-разному</h3>
+      <p>Активные авторы публикуют «ради себя» в закрытых аккаунтах для друзей. Лайки для них «доп. мотивация»: много лайков даёт гордость, мало безразлично. Сравнивать себя с другими они не склонны, хотя пара человек всё же удаляла посты с малым числом реакций.</p>
+      <p>Неактивные зрители много смотрят и лайкают, но публикуют редко: 47,5% отвечают «редко», ещё 24,6% «практически никогда» или «никогда». Лайк для них знак внимания другу или отметка понравившегося видео: за популярность поста не лайкает никто (0,0%). 85,6% редко или никогда не сравнивают себя с популярными людьми, но трое из семи собеседников объясняют интерес других к лайкам завистью, то есть проблему видят у других.</p>
+      <p>Общее у обеих групп: лайк привычный элемент общения, а не оценка личности. «Совсем нет» и «скорее нет» ответили 38,1% и 28,8%: две трети не считают лайки мерой ценности человека.</p>
+      <div class="pull">Лайки не зло, пока они не заменяют внутреннюю опору<small>Главный вывод проекта</small></div>
+      <h3>Матрица психологического влияния</h3>
+      <p class="mute text-base" style="font-size:1rem">Теория, опрос и кейсы в одной сводке. Раскройте строку.</p>
+      <div id="mx"></div>
+    </div>
+    <div class="lg:col-span-5">
+      <div class="card p-5">
+        <h3 class="serif text-3xl mb-1" style="color:var(--amber)">Индекс зависимости от одобрения</h3>
+        <p class="mute text-sm mb-5">Два вопроса и социологический вердикт. Это иллюстрация к исследованию, а не диагностика.</p>
+        <div id="qz" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. ИТОГИ, ЛАЙКИ, КОММЕНТАРИИ -->
+<section id="results" class="panel px-5 md:px-12 py-14" role="tabpanel">
+  <h2 class="text-5xl md:text-7xl max-w-4xl mb-12">Итоги исследования</h2>
+  <div class="grid lg:grid-cols-12 gap-x-12 max-w-6xl t">
+    <div class="lg:col-span-7">
+      <h3 class="!mt-0">Что мы сделали</h3>
+      <p>Разобрали публичные материалы шести знаменитостей (контент-анализ), провели онлайн-опрос в Google Forms среди 118 человек, из них 88,1 % в возрасте 15–20 лет, и построили диаграммы по 14 вопросам. Отдельно проанализировали ответы семи неактивных пользователей на 13 вопросов, интервью активных авторов по восьми вопросам и беседы с двумя психологами. Затем сопоставили все группы между собой.</p>
+      <h3>Чего мы добились</h3>
+      <p><b class="text-white">1. Влияние на самооценку неоднозначно.</b> В опросе большинство говорит, что лайки на него не влияют, но 48,3 % замечают, что чужие публикации хотя бы иногда меняют настроение, уверенность или поведение. Психологи объясняют разницу устойчивостью самооценки и внутренней опорой.</p>
+      <p><b class="text-white">2. Обратная связь меняет поведение, когда на неё опираются.</b> Психологи говорят о потере контакта с собой ради одобрения, кейсы знаменитостей показывают давление цифр и хейта. Активные пользователи с закрытыми профилями публикуют ради себя и друзей и такого давления не описывают.</p>
+      <p><b class="text-white">3. Культ лайков не проблема сам по себе.</b> Лайки могут быть поддержкой и способом общения. Проблема начинается, когда самооценка и значимость целиком связываются с виртуальным одобрением.</p>
+      <h3>Почему это значимо</h3>
+      <p>Работа показывает разрыв между тем, что люди говорят о своём безразличии к лайкам, и тем, что они замечают в своём настроении. Она сравнивает четыре взгляда: обычных пользователей, активных авторов, публичных людей и специалистов. Практический вывод: развивать внутреннюю опору и разделять виртуальный мир и реальность.</p>
+      <p class="mute text-base" style="font-size:1rem">Ограничения: качественные группы небольшие (семь неактивных пользователей и несколько активных, оценки интервью авторов), поэтому их выводы предварительны.</p>
+    </div>
+    <div class="lg:col-span-5">
+      <div class="card p-5"><h3 class="serif text-3xl mb-1" style="color:var(--amber)">Что понравилось читателям</h3><p class="mute text-sm mb-4">Ставьте ♥ в любом разделе, кейсе или вопросе. Комментарий можно оставить через значок справа внизу.</p><ol id="topLk" class="space-y-2 text-sm list-decimal pl-5"></ol></div>
+    </div>
+  </div>
+</section>
+
+<div class="px-5 md:px-12 pb-16 flex justify-between max-w-6xl"><button id="prev" class="btn">Назад</button><button id="next" class="btn">Дальше</button></div>
+</main>
+
+<button id="fab" class="fab" aria-label="Комментарии" aria-expanded="false"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4"/></svg><span id="fabN" class="fabn">0</span></button>
+<div id="dbg" class="dbg"></div>
+<aside id="drawer" class="drawer" aria-label="Комментарии" aria-hidden="true">
+  <div class="flex items-center justify-between mb-3"><h3 class="serif text-3xl" style="color:var(--amber)">Что вы заметили?</h3><button id="closeDr" class="btn" aria-label="Закрыть">✕</button></div>
+  <p class="mute text-sm mb-3">Комментарий анонимный: имя не сохраняется. Не пишите личные данные.</p>
+  <textarea id="cText" maxlength="600" rows="4" class="w-full p-3 text-sm" style="background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--ink)" placeholder="Что вам запомнилось, удивило или показалось спорным?"></textarea>
+  <div class="flex items-center gap-3 mt-3"><button id="cBtn" class="btn">Отправить</button><span id="cMsg" class="text-xs mute"></span></div>
+  <div id="cList" class="mt-5 space-y-3 text-sm overflow-y-auto flex-1"></div>
+</aside>
+
+<script>
+/* ---------- Вкладки (#intro, #psych, #stars, #survey, #inactive, #active, #experts) ---------- */
+const T = [['intro','Введение'],['psych','Психология'],['stars','Знаменитости'],['survey','Опрос'],['inactive','Неактивные'],['active','Активные'],['experts','Эксперты'],['extra','Доп. материалы'],['results','Итоги']];
+const mk = c => T.map((t,i) => `<button class="${c}" role="tab" data-i="${i}">${t[1]}</button>`).join('');
+tabs.innerHTML = mk('tabbtn'); mnav.innerHTML = mk('block w-full text-left py-3 border-b rule tabbtn !m-0');
+let cur = 0;
+function open(i, push){
+  cur = i;
+  T.forEach((t,j) => document.getElementById(t[0]).classList.toggle('on', j === i));
+  document.querySelectorAll('.tabbtn').forEach(b => b.setAttribute('aria-selected', +b.dataset.i === i));
+  prev.style.visibility = i ? 'visible' : 'hidden'; next.style.visibility = i < T.length - 1 ? 'visible' : 'hidden';
+  mnav.classList.add('hidden'); burger.setAttribute('aria-expanded', 'false'); setAcc(i); revealAll();
+  if (push) { history.replaceState(null,'','#' + T[i][0]); scrollTo({top:0}); }
+}
+const go = e => { const b = e.target.closest('button'); if (b) open(+b.dataset.i, true); };
+tabs.onclick = go; mnav.onclick = go;
+burger.onclick = () => burger.setAttribute('aria-expanded', !mnav.classList.toggle('hidden'));
+prev.onclick = () => open(cur - 1, true); next.onclick = () => open(cur + 1, true);
+addEventListener('hashchange', () => { const i = T.findIndex(t => '#' + t[0] === location.hash); if (i > -1) open(i); });
+open(Math.max(0, T.findIndex(t => '#' + t[0] === location.hash)));
+
+/* ---------- Источники: ссылки из PDF (некоторые могли потерять дефисы при переносе строк) ---------- */
+const S = ['https://daily.afisha.ru/infoporn/22740-instadiva-kotoraya-ne-otkryvaet-instagramkak-otkaz-ot-socsetey-povliyal-na-selenu-gomes/','https://theblueprint.ru/culture/history/selena-gomez-o-vrede-instagrama','https://spletnik.ru/84890-selena-gomes-ob-ukhode-iz-sotcsetey-iz-za-negativa82214','https://tengrinews.kz/handsomely/selena-gomes-udivila-sotsseti-seriey-selfi-bezmakiyaja-490165/','https://elle.com.kz/selena-gomes-ucitsia-reagirovat-na-kommentarii-o-svoeifigure','https://www.youtube.com/watch?v=R6rhxJjVNCU','https://the-flow.ru/news/mellstroy-vpiska','https://holod.media/2024/08/21/glavnyj-tresh-strimer/','https://daily.afisha.ru/relationship/27850-ya-prosto-udaril-ee-lbom-ob-stolpochemu-fenomen-mellstroya-eto-otvratitelno/','https://youtube.com/shorts/JWGAMdyUVoY?si=q06oi7Ny4uI8WMeh','https://youtu.be/Ka2xMDYB10E?si=Vy0JOOanJ_B8NN8F','https://the-flow.ru/news/ivleeva-protiv-voyny','https://www.facebook.com/RollingStone/posts/pfbid03tjHJtRg96AcVobw5GaTphwbttNzW5VFcy8NR5R5HqR1yFcpXK2uH6kj5tvri4MQl','https://user.kinogo.mu/38667--billi-ajlish-slegka-razmytyj-mir.html','https://news.ru/show-business/billi-ajlish-rasskazal-o-svoem-samochuvstvii-posleudaleniya-socsetej','https://daily.afisha.ru/music/27624-instasamka-na-strazhe-semeynyh-cennosteybolshoe-intervyu/','https://daily.afisha.ru/music/27624-instasamka-na-strazhe-semeynyh-cennosteybolshoe-intervyu/','https://the-flow.ru/features/instasamka-sobchak-2025','https://tobiz.net/support/kak-layki-formiruyut-nashe-vzaimodeystvie-v-seti/','https://vfokuse.mail.ru/articles/65066854-transformaciya-lajkov-ot-prostogosimvola-do-kultury-odobreniya/','https://exiterra.ru/blog/samorazvitie/psikhologiya-sotsialnykh-setey-zavisimostot-laykov/'];
+const host = u => u.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
+const link = i => `<a class="src" href="${S[i-1]}" target="_blank" rel="noopener">[${i}] ${host(S[i-1])}</a>`;
+src.innerHTML = S.map((u,i) => `<li>${link(i+1).replace('[' + (i+1) + '] ', '')} <span class="mute">${u.length > 60 ? '' : ''}</span></li>`).join('');
+
+/* ---------- Лайки: кнопка в каждом разделе, кейсе и вопросе ---------- */
+const LB = {}; let cnt = {}, mine = {}, uid = null, DB = null;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pill = (k, t) => { LB[k] = t; return `<span class="lk" role="button" tabindex="0" data-k="${k}" aria-pressed="false"><b class="hh">♡</b><span class="n">0</span><span>Нравится</span></span>`; };
+function paintLikes(){
+  document.querySelectorAll('.lk').forEach(el => { const k = el.dataset.k; el.setAttribute('aria-pressed', !!mine[k]); el.querySelector('.hh').textContent = mine[k] ? '♥' : '♡'; el.querySelector('.n').textContent = cnt[k] || 0; });
+  const t = document.getElementById('topLk'); if (!t) return;
+  const r = Object.keys(cnt).filter(k => cnt[k] > 0 && LB[k]).sort((a,b) => cnt[b] - cnt[a]).slice(0,6);
+  t.innerHTML = r.length ? r.map(k => `<li>${esc(LB[k])} <b style="color:var(--amber)">♥ ${cnt[k]}</b></li>`).join('') : '<li class="mute list-none -ml-5">Пока нет лайков: будьте первым.</li>';
+}
+T.forEach(t => { const h = t[0] === 'intro' ? document.querySelector('#intro .marq') : document.querySelector('#' + t[0] + ' h2');
+  if (h) h.insertAdjacentHTML('afterend', `<div class="flex items-center gap-3 ${t[0] === 'intro' ? 'mb-6' : 'mb-8 -mt-6'}">${pill('t_' + t[0], 'Раздел: ' + t[1])}<span class="mute text-xs">Понятно и понравилось? Отметьте раздел.</span></div>`); });
+const W = ['лайк','одобрение','сравнение','тревога','внимание','дофамин','маска','охват','самооценка','тренд'];
+mq.innerHTML = [0,1].map(() => W.map(w => `<span>${w}</span>`).join('')).join('');
+function setAcc(i){ const P = [['#f0665a','#f2a24a'],['#c77dff','#ff9ec4'],['#ffb347','#ff5f6d'],['#4cc9f0','#f72585'],['#9be15d','#f2a24a'],['#ff7b54','#ffd166'],['#b388ff','#ffcf56'],['#ff5d8f','#ffd23f'],['#7dd3fc','#f9a8d4']][i % 9]; document.documentElement.style.setProperty('--red', P[0]); document.documentElement.style.setProperty('--amber', P[1]); }
+var io;
+function revealAll(){
+  if (!io) io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), {threshold:.06});
+  document.querySelectorAll('.panel.on .t > *, .panel.on .card, .panel.on .acc, .panel.on .pull, .panel.on .side').forEach(el => { if (!el.classList.contains('rv')) { el.classList.add('rv'); io.observe(el); } });
+}
+addEventListener('pointermove', e => { spot.style.setProperty('--mx', e.clientX + 'px'); spot.style.setProperty('--my', e.clientY + 'px'); }, {passive:true});
+
+/* ---------- Универсальный аккордеон ---------- */
+const acc = (items, p) => items.map((it,i) => `<button class="acc" aria-expanded="false"><span class="flex justify-between items-baseline gap-4"><span class="serif text-2xl md:text-3xl">${it[0]}</span><span class="plus text-2xl mute">+</span></span><span class="more block pt-4 t max-w-3xl cursor-auto">${it[1]}<span class="block mt-4">${pill(p + i, it[0].replace(/<span[\s\S]*$/, ''))}</span></span></button>`).join('');
+const bind = el => el.onclick = e => { const f = e.target.closest('.fbtn'); if (f) { const x = f.nextElementSibling, o = x.style.display === 'none'; x.style.display = o ? 'block' : 'none'; f.textContent = o ? 'Свернуть полный текст' : 'Читать полностью'; return; } if (e.target.closest('a,.more')) return; const b = e.target.closest('.acc'); if (b) b.setAttribute('aria-expanded', b.getAttribute('aria-expanded') !== 'true'); };
+
+/* ---------- Знаменитости ---------- */
+const STARS = [
+ ['Селена Гомес','Instagram, паника от популярности и уходы из соцсетей',`В начале карьеры она с теплотой вспоминала выступления для сотни зрителей. Со временем её стали оценивать за внешность и личную жизнь, а не за работу. К концу 2016 года у неё было более 100 миллионов подписчиков. В интервью Vogue она рассказала: «Как только я стала самым популярным человеком в Instagram, я немного запаниковала». Она называла себя зависимой от платформы, не могла перестать читать комментарии и примерно раз в неделю удаляла приложение. В августе 2016 года временно ушла из сетей и уехала на лечение (причины были разными, а не только комментарии). Позже передала пароль от аккаунта ассистенту.`,'Даже огромная известность не защищает от тревоги: популярность превращается в постоянную оценку, и иногда нужно отдалиться от соцсетей, чтобы вернуть контроль над жизнью.',[1,2,3,4,5,6]],
+ ['Меллстрой (Андрей Бурим)','стримы, рекорды онлайна и потеря удовольствия от цифр',`Контент создаёт с 2017 года: от игровых трансляций и чат-рулеток к провокационным стримам, конфликтам и денежным челленджам. В интервью «Вписке» (15 августа 2024) рассказал о совместном стриме с Моргенштерном с пиком 720–740 тысяч зрителей: «После него я абсолютно полностью перестал кайфовать от любых цифр онлайна на стриме». Авторы подчёркивают, что анализируют его признание, но не ставят психологический диагноз.`,'Внимание само становится ресурсом, который превращается в популярность и деньги. Если успех измеряется рекордами, когда человеку становится достаточно?',[7,8,9]],
+ ['Анастасия Ивлеева','от любви аудитории к потере контрактов',`Известность пришла через Instagram и шоу «Орёл и решка», затем контракты, собственные шоу, миллионы просмотров. Природа лайков изменилась: теперь это было одобрение статуса и «красивой жизни». После «голой вечеринки» многие бренды расторгли контракты, она столкнулась с осуждением и публично извинялась. Дополнительно на отношение аудитории повлияли её высказывания о политике. Она заявила: «В ваших глазах я выгляжу человеком, слетевшим с катушек, который потерял связь с реальностью», и признала, что «оторвана от реальности в погоне за достижениями».`,'Количество лайков не гарантирует устойчивой популярности, а известность не освобождает от ответственности: общественное одобрение быстро сменяется критикой.',[12]],
+ ['Даша Дошик (Дарья Перова)','TikTok, хейт, сталкер и ментальное истощение',`Стала популярной во время пандемии благодаря липсинкам и юмористическим роликам; после Twitch и YouTube перешла в TikTok, где в 2021 году её каналы стремительно выросли. Вместе с поклонниками появились хейтеры, а травля привела к стрессу и эмоциональному истощению. Она рассказывала о сталкере, приехавшем в Алматы, и о периоде болезни: «Мне было настолько плохо, что я писала завещание». Сейчас она продолжает блогерскую деятельность и восстанавливает здоровье.`,'Популярность приносит не только лайки, но и реальные угрозы и нагрузку на физическое и ментальное здоровье.',[10,11]],
+ ['Билли Айлиш','слава в 14 лет, бодишейминг, уход из соцсетей',`Записала песню с братом в комнате и выложила в интернет, на следующее утро проснулась знаменитой. Лавина внимания, по её словам, лишила её привычной жизни. В фильме «Билли Айлиш: слегка размытый мир» она говорит, что лайки создают лишь иллюзию близости: «В реальности ты просто сидишь одна в четырёх стенах своей комнаты и до ужаса боишься сделать любой неверный шаг». Бодишейминг, панические атаки и депрессия привели к решению удалить все приложения соцсетей и перестать читать о себе.`,'У картинки с миллионами лайков есть изнанка: потеря личной свободы, синдром самозванца и кризисы из-за попыток соответствовать ожиданиям незнакомых людей.',[13,14,15]],
+ ['Инстасамка (Дарья Зотеева)','хайп, маска и экономика внимания',`Карьера связана с провокациями, скандалами и эпатажем, которые помогали привлекать внимание, но вели к конфликтам и потере части рекламных контрактов. В октябре 2023 года она заявила: «Я выросла из дешёвого хайпа и поняла, что так больше не хочу». В интервью «Афише Daily» (июль 2024) сказала: «Для меня маска — это норма»: аудитория часто оценивает созданный образ, а не человека. В интервью Ксении Собчак (октябрь 2025) вспоминала, как важны для артистов цифры прослушиваний. В 2024 году призвала не использовать детей ради охватов и дохода.`,'Количество реакций не всегда отражает отношение общества к человеку, но существенно влияет на известность, репутацию и карьеру. Со временем она заговорила о смене ценностей и ответственности перед молодой аудиторией.',[16,17,18]]
+];
+const FULL = [
+`<p>История Селены Гомес показывает, как культ лайков влияет на жизнь знаменитостей. В начале карьеры она воспринимала известность как возможность заниматься любимым делом. Она с теплотой вспоминала первые выступления, когда на её мероприятиях собиралось около ста человек, и говорила, что была счастлива видеть людей, которые пришли именно ради неё и её работы.</p><p>Однако со временем ситуация изменилась. В интервью 2017 года Селена призналась: “I started getting known for things that weren’t my work” — «Я начала становиться известной благодаря вещам, которые не были связаны с моей работой». Её стали оценивать не только за творчество, но и за внешность, отношения и личную жизнь.</p><p>Особенно сильное влияние на неё оказал Instagram. К концу 2016 года у Селены было более 100 миллионов подписчиков. В интервью Vogue она рассказала: «As soon as I became the most followed person on Instagram, I sort of freaked out» — «Как только я стала самым популярным человеком в Instagram, я немного запаниковала». Она объяснила, что просыпалась и засыпала с Instagram, называла себя зависимой от платформы и признавалась, что после просмотра публикаций часто чувствовала себя плохо.</p><p>Селена также рассказывала, что не могла перестать читать комментарии пользователей. Негативные высказывания сильно её задевали, поэтому примерно раз в неделю она удаляла Instagram со своего телефона. В августе 2016 года она временно ушла из социальных сетей и уехала на лечение. При этом важно понимать, что её решение было связано с разными личными и эмоциональными причинами, а не только с количеством комментариев.</p><p>Позже Селена решила ограничить своё присутствие в интернете: удалила приложение со своего телефона и передала пароль от аккаунта ассистенту. В 2021 году она рассказывала, что её мысли стали вращаться вокруг огромного количества людей, которые говорили о ней как хорошие, так и плохие вещи. Она чувствовала, что получает слишком много информации и теряет контроль над собственной жизнью.</p><p>Таким образом, опыт Селены Гомес показывает, что культ лайков превращает популярность в постоянную оценку со стороны окружающих. Даже достигнув огромной известности, человек может испытывать тревогу и психологическое давление из-за комментариев и чужого мнения. История Селены доказывает, что количество подписчиков и лайков не всегда приносит счастье, а иногда человеку необходимо отдалиться от социальных сетей, чтобы вернуть контроль над своей жизнью.</p>`,
+`<p>Андрей Бурим, известный как Меллстрой, начал создавать контент в интернете в 2017 году. Сначала он пробовал игровые трансляции и общение в чат-рулетках, но со временем перешёл к провокационным стримам, конфликтам и денежным челленджам. Такой формат помог ему привлечь огромную аудиторию.</p><p>Его популярность показывает, что в социальных сетях внимание можно получать не только благодаря таланту или качеству контента, но и благодаря скандалам. Чем неожиданнее происходящее, тем больше людей хотят посмотреть, обсудить и распространить запись.</p><p>Особенно показательно интервью Меллстроя каналу «Вписка» от 15 августа 2024 года. Он рассказал о совместном стриме с Моргенштерном, который, по его словам, собрал пиковый онлайн около 720–740 тысяч зрителей.</p><p>«Я побил эту цель, этот онлайн. Пиковый был 720–740 тысяч зрителей. После него я абсолютно полностью перестал кайфовать от любых цифр онлайна на стриме». Он также говорил, что после этого стримил без прежнего удовольствия.</p><p>Это важный момент для темы «культа лайков». Меллстрой достиг огромного показателя популярности, но сам результат перестал приносить ему прежние эмоции. Его слова позволяют поставить вопрос: почему человеку иногда недостаточно уже достигнутого успеха и почему он продолжает стремиться к новым рекордам?</p><p>При этом важно не утверждать, что мы знаем все причины его поведения. Мы можем анализировать его собственное признание, но не ставить психологический диагноз.</p><p>История Меллстроя показывает, что культ лайков — это не только желание нравиться окружающим. В цифровой среде внимание само становится ресурсом, который можно превращать в популярность и деньги.</p><p>Но возникает вопрос: если успех постоянно измеряется просмотрами и рекордами, когда человеку становится достаточно? Именно это противоречие делает Меллстроя интересным примером для анализа современной культуры социальных сетей.</p>`,
+`<p>Если начать брать всю информацию, которая есть по Насте Ивлеевой, то раньше мы её знали как звезду Инстаграма, и после того как она стала там всемирной звездой, её пригласили на крупное шоу «Орёл и решка», где она вместе с шоуменом Антоном Птушкиным ездила по разным городам и странам, и они вдвоём стали классным дуэтом, который приносил ещё больше лайков. А после этого произошёл бум в карьере Ивлеевой: куча контрактов со спонсорами, собственные шоу, миллионы просмотров и, конечно, лайков. Она использовала способ общения по видео «я такая же как все вы», сам её характер, её харизма стали для всех чем-то знакомым. Аудитория продолжала лайкать, но природа этого лайка изменилась. Теперь это было одобрение статуса, «красивой жизни» и недостижимого идеала.</p><p>И сейчас стала делаться такая теория: чем больше ты делаешь эпатажных или провокационных видео, тем они популярнее. Но когда Настя сделала голую вечеринку и все об этом узнали, то сразу многие её бренды расторгли контракты, в том числе и спонсоры, и сейчас о ней мало чего известно. Стремление получать больше лайков и просмотров также способствует распространению провокационного контента, поскольку эпатаж часто привлекает больше внимания аудитории. В результате блогеры могут начинать ориентироваться не столько на качество своего контента, сколько на количество реакций и обсуждений.</p><p>Однако история Ивлеевой показывает, что популярность имеет и обратную сторону. После скандала с «голой вечеринкой» она столкнулась с общественным осуждением, потерей рекламных контрактов и необходимостью публично извиняться перед аудиторией. Её ситуация демонстрирует, насколько быстро общественное одобрение может смениться критикой. Дополнительное влияние на отношение аудитории оказали её публичные высказывания о политике и событиях, связанных с Россией и Украиной, поскольку общество оценивает знаменитостей не только по их контенту, но и по их поступкам и взглядам. «В ваших глазах я выгляжу человеком, слетевшим с катушек, который потерял связь с реальностью. И как будто бы между нами нет ничего общего», — заявила она. По словам блогера, произошедшая ситуация дала ей понять, настолько она «оторвана от реальности в погоне за достижениями». Она отмечает, что вечеринку можно было сделать «более гуманно, в ногу со временем, с учётом нынешнего положения».</p><p>Таким образом, культура лайков формирует особую систему общественного одобрения, в которой популярность может восприниматься как показатель успеха и значимости человека. При этом аудитория получает возможность не только возвысить публичную личность, но и лишить её поддержки. На мой взгляд, главная проблема культуры лайков заключается в том, что люди начинают зависеть от чужого мнения и стремиться к постоянному вниманию, иногда забывая об ответственности за свои действия. Пример Насти Ивлеевой показывает, что количество лайков не гарантирует устойчивой популярности, а известность не освобождает человека от общественной ответственности. Поэтому важно научиться критически относиться к популярному контенту и понимать, что за образом, который мы видим в социальных сетях, стоит реальный человек, чьи решения могут как укрепить, так и разрушить доверие аудитории.</p>`,
+`<p>Даша Дошик (Дарья Перова) стала популярной во время пандемии, примерно в 2019–2020 годах, благодаря коротким липсинкам и юмористическим роликам. Даша начала свою карьеру в 2020 году на стриминговой платформе Twitch, выкладывая нарезки на свой YouTube-канал. Однако особой популярности на этих площадках добиться не удалось. Заметив отсутствие прогресса, она перешла в TikTok. Популярность пришла не сразу: Даша экспериментировала с контентом, пока не нашла образ, привлекший внимание аудитории. Уже в 2021 году её каналы стали стремительно набирать обороты, благодаря чему она и получила широкую известность.</p><p>Одновременно с ростом популярности Даша столкнулась и с обратной стороной славы. Наряду с поклонниками в сети появились хейтеры, а негативные комментарии нередко становились причиной переживаний. В итоге эта ситуация привела к ухудшению ментального здоровья, сильному стрессу и эмоциональному истощению из-за травли со стороны пользователей. Популярность принесла не только повышенное внимание, но и реальную угрозу в виде сталкинга. Вот как сама Даша описывала ситуацию с преследователем: «Это реальная история. У меня появился сталкер, который снимал ролики и говорил: “Даша, я тебя очень сильно люблю, я приеду за тобой”. Я была в Казахстане и думала, что он просто хайпует. Потом выходит видео, где он на фоне аэропорта Алматинского: “Я приехал за тобой”. Я взяла билеты в Москву и сказала: “Зай, валим!”»</p><p>Известность обернулась для неё не только эмоциональным истощением, но и серьёзными проблемами с физическим здоровьем. Вот как сама блогерша описывала этот период: «Заболела я примерно в июне, простудилась, потом пошли осложнения, и меня пичкали антибиотиками. Врачи долгое время не могли поставить диагноз. У меня начались проблемы с нервной системой, с ЖКТ, со зрением... В итоге у меня нашли опухоль. Мне было настолько плохо, что я писала завещание».</p><p>Подводя итоги: сегодня Даша Дошик продолжает заниматься блогерской деятельностью и развивать свои официальные социальные сети, параллельно справляясь с последствиями высокой популярности. Она сосредоточена на восстановлении физического и ментального здоровья после перенесённого заболевания, а также работает с юристами для урегулирования текущих финансовых и юридических вопросов.</p>`,
+`<p>История Билли Айлиш — это, пожалуй, самый яркий и наглядный пример того, как миллионы лайков, просмотров и внезапная мировая слава могут жёстко ударить по психике человека, особенно когда тебе всего четырнадцать лет. Её карьера началась абсолютно случайно и без всякого продюсерского плана: она вместе с братом просто записала песню в своей комнате на обычный микрофон и выложила её в интернет, чтобы показать своему учителю танцев. Но на следующее утро она проснулась знаменитой, потому что трек мгновенно завирусился. С одной стороны, это кажется заветной мечтой любого современного подростка, но с другой — Билли оказалась к такому масштабу внимания совершенно не готова.</p><p>В своих последующих интервью она честно признавалась, что лавина популярности из интернета буквально уничтожила её привычную жизнь и лишила нормального детства. Например, в большом и откровенном интервью для журнала Rolling Stone она прямо заявила: «Я полностью потеряла понимание того, кто я вообще такая вне интернета. Когда тебя ежедневно оценивают миллионы людей, ты невольно начинаешь смотреть на себя исключительно их глазами».</p><p>Одним из самых тяжёлых и разрушительных испытаний для неё стал масштабный хейт по поводу её внешности и фигуры, который в сети называют бодишеймингом. Миллионы пользователей в комментариях под фотографиями детально обсуждали её тело, стиль одежды и поведение, из-за чего Билли начала сильно комплексовать, столкнулась с жёсткими паническими атаками и начала искренне ненавидеть себя. В своём автобиографическом документальном фильме «Билли Айлиш: слегка размытый мир» она очень точно описала этот фальшивый феномен интернет-популярности: «Люди смотрят на огромные цифры подписчиков на твоей странице и думают, что ты неуязвим, что тебя это не трогает. Но на самом деле лайки создают лишь иллюзию того, что ты со всеми близок и тебя все любят. В реальности ты просто сидишь одна в четырёх стенах своей комнаты и до ужаса боишься сделать любой неверный шаг, который в один миг всё разрушит».</p><p>В конечном итоге колоссальное давление цифровой толпы и постоянное ожидание подвоха довели певицу до глубокой депрессии, и ей пришлось пойти на радикальный шаг ради спасения собственного ментального здоровья. В статье Конана О’Брайена Билли призналась, что полностью удалила абсолютно все приложения социальных сетей со своего телефона и перестала читать что-либо о себе. Для неё, как для человека нового поколения, который буквально вырос со смартфоном в руках, это было огромным и болезненным решением. Она объяснила это тем, что интернет стал слишком токсичным и заставляет людей верить в любую глупость, фейки и выдуманные слухи. Когда она натыкалась на серьёзные видеоролики, где её выставляли «ужасным человеком» и детально разбирали её придуманные минусы, это её по-настоящему пугало, ведь авторы этого контента даже не знали её лично.</p><p>Пример Билли Айлиш чётко доказывает, что у красивой картинки с миллионами лайков есть очень мрачная и опасная изнанка — это тотальная потеря личной свободы, синдром самозванца и ментальные кризисы из-за бесконечных попыток соответствовать ожиданиям миллионов незнакомых людей на экране.</p>`,
+`<p>На примере Инстасамки (Дарьи Зотеевой) можно увидеть, как стремление привлечь внимание аудитории становится частью публичного образа и способом продвижения. Её карьера связана с провокационными высказываниями, скандалами и эпатажем, которые вызывали активные обсуждения в интернете. В статье The Bell «Хайп, хейт, рэп. История Инстасамки — самой скандальной звезды соцсетей в России» отмечается, что провокации помогали ей привлекать внимание, хотя одновременно приводили к конфликтам и потере части рекламных контрактов. В октябре 2023 года на конференции о блогинге она заявила: «Я выросла из дешёвого хайпа и поняла, что так больше не хочу». Певица объяснила, что решила уменьшить количество пошлости и нецензурной лексики в музыке. По её словам, после этого творчество вышло на новый уровень. Это высказывание показывает, что внимание аудитории может быть эффективным способом быстро стать известным, но одной скандальной популярности не всегда достаточно для долгосрочного развития.</p><p>В интервью «Афише Daily» в июле 2024 года певица подробнее рассказала о своём публичном образе. Она сказала: «Для меня маска — это норма», объясняя, что в музыке может примерять разные образы, которые не всегда совпадают с её настоящей личностью. Это важно для анализа культуры лайков: аудитория часто оценивает не реального человека, а созданный им образ. Провокационный персонаж может получать больше внимания, чем искренние высказывания, поэтому блогеру приходится учитывать ожидания подписчиков и поддерживать интерес к себе.</p><p>В интервью Ксении Собчак, опубликованном в октябре 2025 года, Инстасамка вспоминала, как стремилась к успеху и добивалась признания благодаря высоким показателям прослушиваний. Она рассказывала, что была уверена в значимости своих музыкальных результатов и ожидала, что её выберут для международной рекламной кампании Spotify. Этот эпизод показывает, насколько важными для артистов становятся цифры: просмотры и прослушивания воспринимаются не просто как статистика, а как доказательство собственной популярности и профессионального успеха.</p><p>В 2024 году она раскритиковала семью Кукояк за то, что их маленькая дочь регулярно участвует в видео, которые приносят доход. Певица заявила: «Берегите своих детей, будьте ответственны за них и постарайтесь заполнить их жизнь тем, что пригодится им в будущем, а не вам сейчас». Её позиция обращает внимание на обратную сторону экономики лайков: желание увеличить охваты и заработать на популярности может влиять не только на самих блогеров, но и на окружающих их людей.</p><p>Пример Инстасамки показывает, что культура лайков строится на постоянной борьбе за внимание аудитории. Скандалы и провокации способны обеспечить популярность, а критика нередко становится дополнительным источником обсуждений. Однако собственные комментарии певицы показывают и другую сторону этого явления: со временем она начала говорить о смене ценностей, ответственности перед молодой аудиторией и необходимости менять публичный образ. Главный вывод заключается в том, что количество реакций в социальных сетях не всегда отражает реальное отношение общества к человеку, но существенно влияет на его известность, репутацию и карьеру.</p>`
+];
+cases.innerHTML = acc(STARS.map((s,n) => [s[0] + `<span class="block text-sm mute mt-1" style="font-family:Inter">${s[1]}</span>`, `<p>${s[2]}</p><span class="fbtn btn" role="button" tabindex="0" style="display:inline-block;margin:.2rem 0 1rem;cursor:pointer">Читать полностью</span><span class="fulltxt" style="display:none">${FULL[n]}</span><p class="pull" style="font-size:1.35rem;margin:1rem 0">Вывод: ${s[3]}</p><p class="text-sm" style="font-family:Inter">Источники: ${[...new Set(s[4])].map(link).join(' · ')}</p>`]), 's_'); bind(cases);
+
+/* ---------- Опрос: ЗАМЕНИТЕ доли при необходимости ---------- */
+const COL = ['#f0665a','#f2a24a','#e9d8c8','#b3324a','#8a6a7a','#6d6670'];
+const Q = [
+ ['Участники','Сколько Вам лет?',[['15–17 лет',44.9],['18–20 лет',43.2],['21–23 года',11],['24 года и старше',.9]],'Большую часть составляют молодые люди 15–20 лет (88,1 %). Это подходит теме: молодёжь активно пользуется соцсетями и часто взаимодействует с публикациями.'],
+ ['Участники','Какой у Вас пол?',[['Женский',55.1],['Мужской',43.2],['Предпочитаю не указывать',1.7]],'Девушек и парней примерно поровну, девушек немного больше: в исследовании представлены мнения обеих групп.'],
+ ['Использование сетей','Какой социальной сетью Вы пользуетесь чаще всего?',[['TikTok',50.8],['Instagram',24.6],['YouTube',11.9],['Telegram и другое',12.7]],'TikTok выбрала половина участников. Вероятно, это связано с популярностью коротких видео и развлекательного контента, где постоянно видны чужие публикации, просмотры и лайки.'],
+ ['Использование сетей','Сколько времени в день Вы обычно проводите в социальных сетях?',[['Более 4 часов',44.9],['2–4 часа',33.1],['1–2 часа',16.9],['Менее 1 часа',5.1]],'Около 78 % опрошенных проводят в сетях более двух часов ежедневно: многие используют их не только для общения, но и для развлечения и просмотра чужого контента.'],
+ ['Использование сетей','Как часто Вы публикуете посты или сторис?',[['Редко',47.5],['Иногда',28],['Практически никогда',13.6],['Никогда',11]],'Почти половина редко публикует собственные материалы. Многие предпочитают смотреть чужие публикации, а не выкладывать своё.'],
+ ['Отношение к лайкам','Как часто Вы ставите лайки чужим публикациям?',[['Почти всегда / если нравится',49.2],['Часто',39],['Практически никогда',9.3],['Никогда',2.5]],'Большинство активно ставит лайки: они стали привычной частью общения, способом показать, что публикация понравилась, или поддержать знакомого.'],
+ ['Отношение к лайкам','По какой причине Вы обычно ставите лайки чужим публикациям?',[['Если действительно нравится',57.6],['Мы друзья или знакомые',16.1],['Желание поддержать автора',11.9],['Другое (автоматически, показать отношение, популярность)',14.4]],'Чаще всего лайк ставят потому, что понравился контент, но для части участников это способ показать внимание и поддержку знакомым. Лайк не всегда связан с желанием получить одобрение в ответ.'],
+ ['Отношение к лайкам','Обращаете ли Вы внимание на количество лайков под чужими публикациями?',[['Редко',60.2],['Никогда',22.9],['Часто',11.9],['Всегда',5]],'Большинство редко смотрит на число лайков. Вероятно, при просмотре они больше обращают внимание на саму публикацию.'],
+ ['Сравнение и эмоции','Сравниваете ли Вы себя с людьми, чьи публикации набирают много лайков?',[['Никогда',62.7],['Редко',22.9],['Иногда',11.9],['Часто',2.5]],'Большинство не склонно сравнивать себя с популярными пользователями, но влияние таких сравнений нельзя полностью исключать.'],
+ ['Сравнение и эмоции','Как Вы обычно чувствуете себя, когда видите публикации людей, которые кажутся Вам более красивыми, успешными или популярными?',[['Никак не влияет',39],['Вдохновение или мотивация',28.8],['Разные чувства в зависимости от ситуации',15.3],['Сомнения в себе, зависть',9.3],['Радость за него',7.6]],'Большинство относится спокойно, почти треть вдохновляется. Но есть те, кто начинает сомневаться в себе или завидует: соцсети по-разному влияют на настроение.'],
+ ['Мнение о других','Влияет ли количество лайков на ваше восприятие популярности или социальной значимости других людей?',[['Скорее нет',32.2],['Скорее да',29.7],['Определённо нет',18.6],['Определённо да',14.4],['Затрудняюсь ответить',5.1]],'Мнения разделились: 50,8 % считают, что лайки не влияют на восприятие популярности, а 44,1 % признают влияние. Много реакций создаёт впечатление известности даже без знания человека.'],
+ ['Мнение о других','Считаете ли вы, что количество лайков отражает реальную ценность или привлекательность человека?',[['Совсем нет',38.1],['Скорее нет',28.8],['Отчасти',23.7],['Да / затрудняюсь',9.4]],'Большинство не считает, что лайки определяют ценность человека: у человека могут быть тысячи подписчиков, но это ничего не говорит о характере и поступках. Опрошенные понимают разницу между популярностью и ценностью.'],
+ ['Мнение о других','Как часто популярность человека в соцсетях влияет на ваше отношение к нему?',[['Никогда',44.1],['Редко',41.5],['Иногда',11],['Часто',3.4]],'85,6 % редко или никогда не меняют отношение к человеку из-за его популярности. Вероятно, им важнее личное общение и поведение в реальной жизни.'],
+ ['Мнение о других','Замечали ли вы, что просмотр чужих публикаций влияет на ваше настроение, уверенность в себе или поведение?',[['Нет, не замечал(а)',51.7],['Иногда',37.3],['Да, довольно часто',11]],'Чуть больше половины не замечают влияния, но 48,3 % хотя бы иногда сталкиваются с ним. Это один из самых важных результатов исследования.']
+];
+let qi = 0, seg = [];
+qnav.innerHTML = Q.map((q,i) => `<button class="qb" data-i="${i}" aria-pressed="false" aria-label="Вопрос ${i+1}">${i+1}</button>`).join('');
+const R = 70, C = 2 * Math.PI * R;
+function drawQ(i){
+  qi = i; const q = Q[i]; let off = 0, h = '';
+  qTheme.textContent = q[0] + ' · вопрос ' + (i+1) + ' из ' + Q.length; qTitle.textContent = q[1]; qText.textContent = q[3];
+  q[2].forEach((s,k) => { const len = C * s[1] / 100;
+    h += `<circle class="seg" data-i="${k}" cx="100" cy="100" r="${R}" fill="none" stroke="${COL[k]}" stroke-width="26" stroke-dasharray="${Math.max(len - 1.2,.1)} ${C - len + 1.2}" stroke-dashoffset="${-off}" tabindex="0"/>`; off += len; });
+  donut.style.animation = 'none'; void donut.offsetWidth; donut.style.animation = ''; donut.innerHTML = h;
+  legend.innerHTML = q[2].map((s,k) => `<button class="flex items-start gap-2 text-left" data-i="${k}"><span style="width:10px;height:10px;background:${COL[k]};flex:none;margin-top:.45rem"></span>${s[0]}: ${s[1].toString().replace('.', ',')} %</button>`).join('');
+  dPct.textContent = q[2][0][1].toString().replace('.', ',') + '%'; dLbl.textContent = q[2][0][0].length > 24 ? q[2][0][0].slice(0,22) + '…' : q[2][0][0]; pick(0);
+  qnav.querySelectorAll('button').forEach((b,k) => b.setAttribute('aria-pressed', k === i));
+  prevq.style.visibility = i ? 'visible' : 'hidden'; qLike.innerHTML = pill('q_' + i, 'Опрос, вопрос ' + (i + 1)); paintLikes();
+}
+function pick(k){
+  const s = Q[qi][2][k]; dPct.textContent = s[1].toString().replace('.', ',') + '%'; dLbl.textContent = s[0].length > 24 ? s[0].slice(0,22) + '…' : s[0];
+  donut.querySelectorAll('.seg').forEach((c,j) => { c.style.opacity = j === k ? 1 : .3; c.setAttribute('stroke-width', j === k ? 32 : 26); });
+}
+const prevq = document.getElementById('qp'), nextq = document.getElementById('qn');
+const hit = e => { const el = e.target.closest('[data-i]'); if (el) pick(+el.dataset.i); };
+donut.onmouseover = hit; donut.onclick = hit; legend.onclick = hit; donut.onfocusin = hit;
+qnav.onclick = e => { const b = e.target.closest('button'); if (b) drawQ(+b.dataset.i); };
+prevq.onclick = () => drawQ(Math.max(0, qi - 1)); nextq.onclick = () => drawQ(Math.min(Q.length - 1, qi + 1)); drawQ(0);
+
+/* ---------- Неактивные пользователи ---------- */
+inQ.innerHTML = acc([
+ ['1. Какой соцсетью пользуетесь чаще всего?','<p>Шестеро из семи используют TikTok, трое YouTube; преобладает видео. Три модели: развлечение, познание (учёба и саморазвитие) и общение. Для большинства соцсети место потребления, а не самопрезентации.</p>'],
+ ['2. Сколько времени проводите в соцсетях?','<p>Пятеро называют от двух до пяти часов в день, пятый участник 10–12 часов. Оценки приблизительные. Неактивность по публикациям не означает малого времени в сетях.</p>'],
+ ['3. Как часто публикуете посты или сторис?','<p>Все семеро почти не создают контент, но причины разные: внешний повод (конкурс), социальный повод («для друзей»), отсутствие смысла и закрытость характера. Неактивность может быть и выбором, и чертой личности.</p>'],
+ ['4. Как часто ставите лайки?','<p>От «изредка» до «почти всегда». Трое лайкают часто, почти ничего не публикуя: можно не создавать контент, но активно участвовать в культуре лайков как зритель. Частота зависит и от близости к автору. Твёрдых выводов по семи ответам делать нельзя.</p>'],
+ ['5. По какой причине ставите лайки?','<p>Содержательные мотивы (контент, автор) у четверых, социальные (друзья, реакция окружения) у троих. Даже у тех, кто не публикует, лайк тесно связан с личными связями.</p>'],
+ ['6. Обращаете внимание на число лайков?','<p>Пятеро не обращают, один замечает эпизодически, пятый следит всегда. Он же единственный признаётся в зависти и комплексах. Связь можно предположить, но обобщать по одному человеку нельзя.</p>'],
+ ['7. Сравниваете себя с теми, кто собирает много лайков?','<p>Пятеро не сравнивают, один редко, пятый иногда. Один из респондентов объясняет это тем, что не ведёт активной социальной жизни, и сопоставлять себя не с чем.</p>'],
+ ['8. Что чувствуете, видя «более успешных»?','<p>Безразличие (четверо), вдохновение (один), зависть и комплексы (один), уважительное признание (один). Культура лайков может вызывать сравнение даже у тех, кто ничего не публикует. Признаться в безразличии проще, чем в зависти, но это лишь предположение.</p>'],
+ ['9. Влияют ли лайки на восприятие популярности?','<p>Четверо допускают влияние, трое категорично отрицают. Один отделяет себя от остальных: «на меня нет, а на общество да».</p>'],
+ ['10. Отражают ли лайки ценность человека?','<p>Пятеро отрицают, один признаёт, один допускает. Один из респондентов понимает, что число лайков зависит от алгоритмов платформы.</p>'],
+ ['11. Как популярность влияет на отношение?','<p>Никто не признаёт сильного влияния популярности как таковой. Для незнакомого человека первое впечатление строится на публикациях: работает образ, а не число лайков.</p>'],
+ ['12. Влияет ли просмотр чужих публикаций на настроение?','<p>Шестеро допускают влияние, один отрицает. По характеру оно контентное (весёлые видео), мотивационное и социальное. Пятый участник отмечает, что влияют только публикации знакомых (гипотеза: сравнение сильнее в близком круге).</p>'],
+ ['13. Почему люди следят за лайками, даже не публикуя?','<p>Самое частое объяснение зависть (трое, а пятый признаёт её в себе). Также названы общественное мнение, чувство значимости, желание выделиться и стремление к популярности. Все говорят о других, а не о себе.</p>']
+], 'in_'); bind(inQ);
+prof.innerHTML = [['1 · Спокойный наблюдатель','TikTok, публикует редко, цифры замечает, но не придаёт им значения.'],['2 · Зритель, ориентирующийся на друзей','YouTube, лайкает то, что одобрили друзья; влияние лайков видит у общества, не у себя.'],['3 · Активный зритель','Не публикует, но лайкает часто; единственный, кто считает, что лайки отражают ценность.'],['4 · Целеустремлённый','Соцсети для учёбы и развития; видит мотивацию и роль алгоритмов.'],['5 · Вовлечённый наблюдатель','10–12 часов в сетях, всегда смотрит на лайки; признаёт зависть и комплексы.'],['6 · Закрытый, ориентированный на близких','Лайкает близким часто, чужим редко; не считает себя открытой личностью.'],['7 · Лаконичный зритель','TikTok и Telegram, около пяти часов; отвечал кратко и без пояснений.']].map(p => `<div class="card p-4"><p class="serif text-xl">${p[0]}</p><p class="mute">${p[1]}</p></div>`).join('');
+
+/* ---------- Активные пользователи ---------- */
+acQ.innerHTML = acc([
+ ['1. Активность и мотивация','<p>Все ведут Instagram или TikTok и часто публикуют сторисы и видео. Мотивация: «публикую чисто ради себя», а лайки лишь дополнительная мотивация. Все сети закрыты, контент смотрят друзья.</p>'],
+ ['2. Важность лайков и комментариев','<p>Всем без исключения всё равно на количество; если лайков много, это хороший бонус.</p>'],
+ ['3. Чувства при многих и малых лайках','<p>Много лайков: «непередаваемое счастье» и гордость. Мало: всё равно, на них это не влияет.</p>'],
+ ['4. Влияние на настроение и самооценку','<p>Признаков нестабильной самооценки нет: публикуют ради себя, на негатив не реагируют, уверенность не страдала.</p>'],
+ ['5. Сравнение с другими','<p>Не сравнивают: каждый по-своему уникален.</p>'],
+ ['6. Удаление публикаций из-за малого числа реакций','<p>Пара человек удаляла, остальные оставляли такие видео и сторисы, и для них это нормально.</p>'],
+ ['7. Отражают ли лайки ценность человека','<p>Для них важен человек, каким он является внутри; в видео и в жизни он может быть разным. Много лайков получают те, кто умеет зацепить зрителя характеристикой.</p>'],
+ ['8. Помощь или зависимость от чужого мнения','<p>«Этот вопрос 50/50, для кого помощь, а для кого зависимость». Для них это помощь в развитии и опыт, они нейтральны и об этом не думают.</p>']
+], 'ac_'); bind(acQ);
+
+/* ---------- Эксперты ---------- */
+exp.innerHTML = acc([
+ ['Нургуль: потребность в лайках','<p>Потребность в одобрении естественна: так мы чувствуем значимость личности. Лайки цифровой показатель социального одобрения.</p>'],
+ ['Нургуль: лайки и самооценка','<p>Для некоторых соцсети источник дофамина. При малом числе лайков, по её словам, «у человека возникает автоматически мысль, что с ним что-то не так. В нём поднимается тревога, и начинается внутреннее самокопание».</p>'],
+ ['Нургуль: почему одни спокойны, другие тревожны','<p>«Это зависит как от внутренней опоры человека, так и от прошлого опыта». Устойчивая самооценка меньше связывает значимость с лайками; неустойчивая воспринимает малое число реакций как непринятие.</p>'],
+ ['Нургуль: сравнение','<p>Человек оценивает жизнь через чужие публикации: «Мы забываем о том, что находится за кадром, и что это всего лишь маленький отрезок их жизни». Это ведёт к обесцениванию своих достижений.</p>'],
+ ['Нургуль: зависимость от одобрения','<p>«Да, может. Формируется привычка вечно искать подтверждение своей значимости». Важную роль играет переменное подкрепление: неопределённость числа реакций поддерживает привычку проверять сети.</p>'],
+ ['Нургуль: изменение поведения','<p>«Когда человеку становится важно количество лайков, он делает то, что может быть не свойственно ему... Когда он хочет одобрения, он теряет контакт с собой». Он повторяет тренды и может делиться слишком личным.</p>'],
+ ['Ербол: влияние зависимости от одобрения','<p>Зависимость от одобрения естественна. «В зависимости от реакции аудитории может повышаться настроение и дофамин, а также самооценка», но при чрезмерности последствия преимущественно негативные.</p>'],
+ ['Ербол: личность и обратная связь','<p>«Личность формируется из множества отражений реакций других людей». Лайки и комментарии становятся показателями общественной реакции.</p>'],
+ ['Ербол: случаи из практики','<p>К нему обращалась девушка с жалобами на дефицит внимания и усидчивости. Одной из причин оказались соцсети: «дефицит внимания неизбежно проявляется в связи с получением быстрого дофамина».</p>'],
+ ['Ербол: совет','<p>«Стараться отделять виртуальный мир от реального. Мы как индивиды самодостаточны, и у нас есть внутренний стержень. В погоне за популярностью и статусом есть угроза потерять себя».</p>']
+], 'ex_'); bind(exp);
+
+/* ---------- Доп. материалы: матрица и мини-тест ---------- */
+mx.innerHTML = acc([
+ ['Потребность в одобрении','<p><b class="text-white">Даёт:</b> чувство принадлежности, приятные эмоции, поддержку друзей.</p><p><b class="text-white">Риск:</b> самооценка начинает зависеть от чужой реакции.</p><p><b class="text-white">Данные:</b> за популярность поста не лайкает никто (0,0%).</p>'],
+ ['Положительное подкрепление','<p><b class="text-white">Даёт:</b> мотивацию продолжать творчество и развиваться.</p><p><b class="text-white">Риск:</b> публикация из самовыражения превращается в поиск подтверждения значимости.</p><p><b class="text-white">Данные:</b> 17,0% часто или всегда смотрят на число лайков, 83,1% редко или никогда.</p>'],
+ ['Социальное сравнение','<p><b class="text-white">Даёт:</b> вдохновение и мотивацию (28,8% опрошенных).</p><p><b class="text-white">Риск:</b> зависть (3,4%), сомнения в себе (5,9%), искажённая картина чужой идеальной жизни.</p><p><b class="text-white">Данные:</b> 85,6% редко или никогда не сравнивают себя с популярными.</p>'],
+ ['Разрыв «Я реальная / Я идеальная»','<p><b class="text-white">Даёт:</b> фильтры и образ позволяют самовыражаться.</p><p><b class="text-white">Риск:</b> лайки подкрепляют «идеальную себя», а зеркало потом показывает недостатки (П. Свечникова).</p><p><b class="text-white">Данные:</b> качественный вывод эксперта, в анкете такого вопроса не было.</p>'],
+ ['Публичность и критика','<p><b class="text-white">Даёт:</b> известность, аудиторию, профессиональный рост.</p><p><b class="text-white">Риск:</b> травля, стресс, потеря контрактов и контроля над образом.</p><p><b class="text-white">Данные:</b> кейсы Селены Гомес, Даши Дошик, Билли Айлиш, Анастасии Ивлеевой.</p>']
+], 'mx_'); bind(mx);
+const QZ = [['Смотрите ли вы на чужие лайки?',['Почти никогда','Иногда','Почти всегда']],['Портится ли настроение, когда под вашими постами мало реакций?',['Нет, мне всё равно','Немного','Да, заметно']]];
+const VD = [['Внутренняя опора','Лайки для вас приятный бонус, а не мерило. Так живёт большинство опрошенных: 83,1% редко или никогда не смотрят на счётчик. Реакция зрителей остаётся обратной связью, а не оценкой личности.'],['Качели','Реакции заметно влияют на настроение, но решениями вы ими пока не управляете. Психолог Нургуль Джуламанова связывает такие различия с внутренней опорой и прошлым опытом: чем больше ценность держится на чужом одобрении, тем сильнее качели.'],['Зеркало аудитории','Вы оцениваете себя глазами зрителей: число реакций решает, что оставить, а что удалить. Психологи предупреждают: когда человек хочет одобрения, он теряет контакт с собой. Это не диагноз, а сигнал вернуть опору внутрь.']];
+let qa = [null, null];
+function qzDraw(){
+  const done = qa.every(x => x !== null), sc = qa.reduce((s,x) => s + (x || 0), 0), v = VD[sc <= 1 ? 0 : sc <= 3 ? 1 : 2];
+  qz.innerHTML = QZ.map((q,i) => `<p class="mb-2 text-white">${q[0]}</p><div class="flex flex-wrap gap-2 mb-5">${q[1].map((o,j) => `<button class="btn" aria-pressed="${qa[i] === j}" data-q="${i}" data-a="${j}">${o}</button>`).join('')}</div>`).join('')
+   + (done ? `<div class="border-t rule pt-4"><p class="serif text-3xl" style="color:var(--amber)">${v[0]}</p><p class="mute text-sm mb-2">Индекс: ${sc} из 4</p><div class="mb-3" style="height:6px;background:rgba(255,255,255,.1)"><i style="display:block;height:100%;width:${sc * 25}%;background:linear-gradient(90deg,var(--red),var(--amber));transition:width .6s"></i></div><p class="text-sm">${v[1]}</p><button class="btn mt-4" data-r="1">Пройти заново</button></div>` : '<p class="mute text-xs">Ответьте на оба вопроса, чтобы увидеть вердикт.</p>');
+}
+qz.onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.r) qa = [null, null]; else qa[+b.dataset.q] = +b.dataset.a; qzDraw(); };
+qzDraw();
+
+/* ---------- Комментарии (значок справа внизу) и база лайков ---------- */
+function toggleDr(o){ drawer.classList.toggle('on', o); dbg.classList.toggle('on', o); fab.setAttribute('aria-expanded', o); drawer.setAttribute('aria-hidden', !o); if (o) setTimeout(() => cText.focus(), 350); }
+fab.onclick = () => toggleDr(!drawer.classList.contains('on')); dbg.onclick = () => toggleDr(false); closeDr.onclick = () => toggleDr(false);
+function toast(t){ const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 3200); }
+function burst(el){
+  if (matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const r = el.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, g = ['♥','✦','♡','•','★'];
+  for (let i = 0; i < 16; i++) { const s = document.createElement('span'), a = Math.random() * 6.28, d = 50 + Math.random() * 90; s.className = 'pt'; s.textContent = g[i % 5];
+    s.style.cssText = `left:${x}px;top:${y}px;--dx:${Math.cos(a) * d}px;--dy:${Math.sin(a) * d - 40}px;color:${i % 2 ? 'var(--red)' : 'var(--amber)'};font-size:${12 + Math.random() * 16}px`; document.body.appendChild(s); setTimeout(() => s.remove(), 1000); }
+}
+document.addEventListener('click', async e => {
+  const el = e.target.closest('.lk'); if (!el) return; burst(el);
+  const k = el.dataset.k, on = !mine[k];
+  if (DB && uid) { try { const ref = DB.collection('likes').doc(k + '~' + uid); if (on) await ref.set({k}); else await ref.delete(); } catch (x) { toast('Лайк не сохранён: нужен доступ «Контрибьютор».'); } }
+  else { mine[k] = on; cnt[k] = Math.max(0, (cnt[k] || 0) + (on ? 1 : -1)); paintLikes(); toast('Лайк виден только вам: откройте страницу из аккаунта claude.ai.'); }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') toggleDr(false);
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('lk')) { e.preventDefault(); e.target.click(); }
+});
+cBtn.disabled = true; cMsg.textContent = 'Комментарии доступны при входе в claude.ai.';
+cBtn.onclick = async () => {
+  const t = cText.value.trim(); if (!t || !DB) return; cBtn.disabled = true;
+  try { await DB.collection('comments').add({t:Date.now(), text:t.slice(0,600), sec:T[cur][1]}); cText.value = ''; cMsg.textContent = 'Отправлено анонимно.'; }
+  catch (x) { cMsg.textContent = 'Не удалось: писать могут участники с доступом «Контрибьютор».'; }
+  cBtn.disabled = false;
+};
+(async () => {
+  try {
+    if (!window.claude) return;
+    const [d, u] = [await claude.use('db'), await claude.use('user')];
+    if (!d || !u) return; uid = await u.id(); DB = d; cBtn.disabled = false; cMsg.textContent = '';
+    d.collection('likes').onSnapshot(s => { cnt = {}; mine = {}; s.docs.forEach(x => { const k = x.data().k; cnt[k] = (cnt[k] || 0) + 1; if (x.id.endsWith('~' + uid)) mine[k] = 1; }); paintLikes(); }, () => {});
+    d.collection('comments').orderBy('t','desc').limit(100).onSnapshot(s => {
+      fabN.textContent = s.size; fabN.style.display = s.size ? 'grid' : 'none';
+      cList.innerHTML = s.docs.map(x => { const c = x.data(); return `<div class="card p-3"><p class="mute text-xs mb-1">Аноним · ${esc(c.sec || '')} · ${new Date(c.t).toLocaleDateString('ru-RU')}</p><p style="white-space:pre-wrap">${esc(c.text)}</p></div>`; }).join('') || '<p class="mute text-xs">Комментариев пока нет. Будьте первым.</p>';
+    }, () => {});
+  } catch (x) {}
+})();
+paintLikes(); revealAll();
+
+/* ---------- Эффекты v3: частицы, параллакс, прогресс чтения, живое стекло ---------- */
+(() => {
+  const rm = matchMedia('(prefers-reduced-motion:reduce)');
+  const root = document.documentElement;
+  const bar = document.querySelector('.fx-progress i');
+
+  /* Прогресс чтения */
+  let pTick = false;
+  function updProgress(){
+    pTick = false;
+    const h = document.documentElement.scrollHeight - innerHeight;
+    const p = h > 0 ? Math.min(1, Math.max(0, scrollY / h)) : 0;
+    root.style.setProperty('--prog', p.toFixed(4));
+  }
+  const reqProgress = () => { if (!pTick) { pTick = true; requestAnimationFrame(updProgress); } };
+  addEventListener('scroll', reqProgress, {passive:true});
+  addEventListener('resize', reqProgress, {passive:true});
+  if (window.ResizeObserver) new ResizeObserver(reqProgress).observe(document.body);
+  updProgress();
+
+  /* Частицы-символы */
+  const box = document.getElementById('fxp');
+  function buildParticles(){
+    if (!box || rm.matches || box.childElementCount) return;
+    const sym = ['♥','✦','•','✧','♡','·','★','●'], col = ['#f0665a','#f2a24a','#ff7aa8','#ffe3b0','#b79cff'];
+    const n = innerWidth < 700 ? 14 : 30;
+    for (let i = 0; i < n; i++){
+      const s = document.createElement('span'), depth = Math.random();       /* 0 = далеко, 1 = близко */
+      const size = 8 + depth * 26, blur = depth > .75 ? 2 + Math.random() * 3 : depth < .3 ? 1.2 : Math.random() * 1.2;
+      s.textContent = sym[i % sym.length];
+      s.style.cssText = `--x:${(Math.random() * 100).toFixed(1)}%;--s:${size.toFixed(1)}px;--b:${blur.toFixed(1)}px;--c:${col[i % col.length]};`
+        + `--o:${(.12 + depth * .28).toFixed(2)};--t:${(22 + (1 - depth) * 26 + Math.random() * 12).toFixed(1)}s;--dl:-${(Math.random() * 45).toFixed(1)}s;`
+        + `--sw:${((Math.random() - .5) * 18).toFixed(1)}vw;--r:${((Math.random() - .5) * 360).toFixed(0)}deg;`
+        + `--pd:${(10 + depth * 50).toFixed(0)}px;--ps:${(-40 - depth * 220).toFixed(0)}px`;
+      box.appendChild(s);
+    }
+  }
+  buildParticles();
+
+  /* Параллакс от курсора и прокрутки (плавное сглаживание) */
+  let tx = 0, ty = 0, cx = 0, cy = 0, ts = 0, cs = 0, raf = 0;
+  function scrollNorm(){ const h = document.documentElement.scrollHeight - innerHeight; return h > 0 ? scrollY / h : 0; }
+  function loop(){
+    cx += (tx - cx) * .06; cy += (ty - cy) * .06; cs += (ts - cs) * .08;
+    root.style.setProperty('--pmx', cx.toFixed(4));
+    root.style.setProperty('--pmy', cy.toFixed(4));
+    root.style.setProperty('--psy', cs.toFixed(4));
+    if (Math.abs(tx - cx) + Math.abs(ty - cy) + Math.abs(ts - cs) > .0005) raf = requestAnimationFrame(loop); else raf = 0;
+  }
+  const kick = () => { if (!raf && !rm.matches) raf = requestAnimationFrame(loop); };
+  addEventListener('pointermove', e => {
+    if (rm.matches || e.pointerType === 'touch') return;
+    tx = e.clientX / innerWidth - .5; ty = e.clientY / innerHeight - .5; kick();
+  }, {passive:true});
+  addEventListener('scroll', () => { if (rm.matches) return; ts = scrollNorm(); kick(); }, {passive:true});
+  addEventListener('resize', () => { ts = scrollNorm(); kick(); }, {passive:true});
+  ts = cs = scrollNorm();
+
+  /* «Живое стекло»: блик следует за курсором на .card и .pull (делегирование, работает и для динамических карточек) */
+  let gEl = null, gx = 0, gy = 0, gRaf = 0;
+  function paintGlass(){
+    gRaf = 0; if (!gEl) return;
+    const r = gEl.getBoundingClientRect();
+    gEl.style.setProperty('--gx', (gx - r.left).toFixed(1) + 'px');
+    gEl.style.setProperty('--gy', (gy - r.top).toFixed(1) + 'px');
+  }
+  document.addEventListener('pointermove', e => {
+    if (e.pointerType === 'touch') return;
+    const el = e.target.closest && e.target.closest('.card, .pull');
+    if (!el) return;
+    gEl = el; gx = e.clientX; gy = e.clientY;
+    if (!gRaf) gRaf = requestAnimationFrame(paintGlass);
+  }, {passive:true});
+
+  /* Реакция на смену настройки «уменьшить движение» на лету */
+  const onRm = () => {
+    if (rm.matches){ root.style.removeProperty('--pmx'); root.style.removeProperty('--pmy'); root.style.removeProperty('--psy'); }
+    else { buildParticles(); ts = scrollNorm(); kick(); }
+  };
+  if (rm.addEventListener) rm.addEventListener('change', onRm); else if (rm.addListener) rm.addListener(onRm);
+})();
+</script>
+</body>
+</html>
